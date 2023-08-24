@@ -26,3 +26,11 @@ func_11 : membalikkan key-value menjadi value-key di dalam dictionary yang baru
 func_12 : Memisahkan string yang berisi string dan number
 func_13 : Sorting list string yang berbentuk angka
 func_14 : Mencari nilai ganjil di antara rentang nilai tertentu
+
+os_1 : The main program then calls these functions and checks if either the disk usage is too low (less than 20%) or the CPU usage is too high (more than 75%). If either condition is met, an error message is printed; otherwise, a success message is printed. This code can be used to monitor the system's disk and CPU health.
+os_2 : read file
+os_3 : write file
+os_4 : working with file
+os_5 : file information
+os_6 : mendeteksi absolut path pada file yang berada di relative path
+os_7 : directory
