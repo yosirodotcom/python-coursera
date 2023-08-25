@@ -34,3 +34,10 @@ os_4 : working with file
 os_5 : file information
 os_6 : mendeteksi absolut path pada file yang berada di relative path
 os_7 : directory
+
+csv_1 : read csv
+csv_2 : membuat csv file dari data list
+csv_3 : membuat csv file dari data dictionary
+
+regex_1 : mencari nama file dengan bash shell
+regex_2 : mencari character tertentu pada sebuah baris kata di python
