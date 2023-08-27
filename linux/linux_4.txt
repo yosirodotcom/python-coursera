@@ -1,0 +1,46 @@
+in check_ron.py
+>>> import re
+>>> import sys
+
+>>> logfile = sys.argv[1] # ini cara agar dari terminal kita bisa memasukkan parameter ke fungsi di bawah ini
+>>> with open(logfile) as f:
+>>>     for line in f:
+>>>         if "CRON" not in line:
+>>>             continue
+>>>         pattern = r"USER \((\w+)\)$"
+>>>         result = re.search(pattern, line)
+>>>         print(result[1])
+
+ini contoh isi syslog nya
+user@ubuntu:~$ cat syslog
+computer.name CRON[29440]: USER (good_user)
+
+user@ubuntu:~$ chmod +x check_cron.py
+user@ubuntu:~$ ./check_cron.py syslog 
+
+spasi syslog ini adalah cara untuk memasukkan parameter ke 
+dalam fungsi yang ada di dalam script.
+
+Intinya fungsi tersebut mengambil data dari syslog ini
+yang ada di linux dan mengambil string username nya sajang
+
+Bagaimana jika kita ingin merangkum data, misalkan jumlah username
+yang berada di syslog
+
+>>> import re
+>>> import sys
+
+>>> logfile = sys.argv[1] 
+>>> with open(logfile) as f:
+>>>     for line in f:
+>>>         if "CRON" not in line:
+>>>             continue
+>>>         pattern = r"USER \((\w+)\)$"
+>>>         result = re.search(pattern, line)
+>>>         if result is None:
+>>>             continue
+>>>         name = result[1]
+>>>         username[name] = username.get(name, 0) + 1
+>>> print(username)
+
+jalankan script ini pada shell

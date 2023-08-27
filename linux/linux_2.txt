@@ -1,0 +1,44 @@
+
+Fungsi subprocess adalah modul di dalam Python yang digunakan untuk berinteraksi dengan 
+sistem operasi melalui subproses (proses anak). Ini memungkinkan Anda untuk menjalankan 
+perintah-perintah shell atau menjalankan program eksternal dari dalam skrip Python. Dengan 
+menggunakan modul subprocess, Anda dapat menjalankan perintah-perintah sistem, berkomunikasi 
+dengan proses eksternal, mengirim input ke proses, dan menerima output dari proses.
+
+>>> import subprocess
+>>> subprocess.run(["date"])
+
+Fungsi run() menerima argumen dalam bentuk daftar (list) di mana setiap elemen 
+daftar adalah bagian dari perintah yang akan dijalankan. Di sini, ["date"] adalah 
+daftar yang berisi satu elemen, yaitu "date", yang merupakan perintah yang ingin dijalankan.
+
+Jadi, saat kode ini dijalankan, hasilnya akan mencetak tanggal dan waktu saat ini di terminal.
+
+perintah lainnya seperti:
+>>> subprocess.run(["sleep", "2"])
+
+perintah lainnya:
+>>> result = subprocess.run(["ls", "namafile"])
+>>> print(result.return_code)
+
+perintah lainnya:
+>>> result = subprocess.run(["host", "8.8.8.8"], capture_output=True)
+>>> print(result.return_code)
+0
+>>> print(result.stdout.decode())
+['8.8.8.8.in-addr.arpa', 'domain', 'name','pointer', 'dns.google.']
+
+result = subprocess.run(["host", "8.8.8.8"], capture_output=True): Kode ini menjalankan 
+perintah "host" pada alamat IP "8.8.8.8". Argumen pertama dalam daftar ["host", "8.8.8.8"] 
+adalah perintah dan argumen yang akan diberikan kepada perintah tersebut. Parameter 
+capture_output=True digunakan untuk menangkap output dari perintah yang dijalankan.
+
+print(result.stdout.decode()): Ini mencetak output dari perintah yang dijalankan. 
+Karena Anda menggunakan capture_output=True, output perintah akan ditangkap dalam 
+atribut stdout dari objek result. Namun, perlu didekode dari bentuk byte menjadi string 
+menggunakan metode decode() karena stdout disimpan dalam bentuk byte.
+
+perintah lainnya:
+>>> result = subprocess.run(["rm", "namafile"], capture_output=True)
+>>> print(result.stdout) # Ini mencoba mencetak output standar (stdout) dari perintah yang dijalankan
+>>> print(result.stderr) # Ini mencetak output kesalahan standar (stderr) dari perintah yang dijalankan.

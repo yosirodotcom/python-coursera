@@ -1,0 +1,79 @@
+Input Output Streams
+
+STDIN: standard Input
+STDOUT: standard Output
+STDERR: standard error
+
+# Environtment Variable
+
+user@ubuntu:~$ env
+Untuk melihat semua variable yang berada di Environtment.
+Salah satu variable yang penting adalah PATH
+
+user@ubuntu:~$ echo $PATH
+Untuk melihat semua variable PATH
+
+Pada python, kita bisa mendapatkan path directory dari variabel yang ada.
+
+import os
+print(os.environ.get("HOME", ""))
+print(os.environ.get("SHELL", ""))
+
+Variabel lingkungan (environment variable) adalah variabel yang disimpan di sistem operasi dan 
+digunakan untuk menyimpan informasi konfigurasi, pengaturan, dan informasi lain yang dapat diakses 
+oleh berbagai program dan skrip yang berjalan di dalam lingkungan sistem tersebut. Variabel 
+lingkungan ini berisi pasangan "nama-nilai", di mana "nama" adalah identifikasi unik untuk variabel, 
+dan "nilai" adalah data yang disimpan dalam variabel tersebut.
+
+Beberapa contoh variabel lingkungan yang umum digunakan:
+
+PATH: Menentukan direktori-direktori di mana sistem akan mencari eksekusi program.
+HOME: Menunjukkan jalur (path) ke direktori beranda pengguna.
+SHELL: Menunjukkan jalur ke shell yang aktif digunakan oleh pengguna.
+LANG: Menentukan pengaturan lokal dan bahasa sistem.
+USER: Menunjukkan nama pengguna yang saat ini masuk dalam sesi.
+
+Untuk membuat variable di dalam environment, bisa menggunakan perintah berikut:
+user@ubuntu:~$ export FRUIT="Pisang" 
+
+Kita bisa mendefinisikan 
+
+Pada parameters.py:
+
+#!/usr/bin/env python3
+import sys
+print(sys.argv)
+
+pada shell:
+user@ubuntu:~$ parameters.py one two three
+['parameters.py', 'one', 'two', 'three']
+
+print(sys.argv): Ini mencetak isi dari daftar sys.argv. sys.argv adalah daftar argumen baris perintah 
+yang diberikan saat menjalankan skrip. Indeks pertama (sys.argv[0]) biasanya berisi nama skrip itu sendiri.
+Nama skrip (parameters.py) dianggap sebagai argumen pertama (sys.argv[0]).
+"one" dianggap sebagai argumen kedua (sys.argv[1]).
+"two" dianggap sebagai argumen ketiga (sys.argv[2]).
+"three" dianggap sebagai argumen keempat (sys.argv[3]).
+
+
+# Exit Status:
+Jika 0, berarti success, selain itu tidak sukses. Jika sebuah program dijalankan.
+
+Hasil yang dikembalikan oleh perintah wc biasanya terdiri dari tiga angka yang mewakili 
+jumlah baris, jumlah kata, dan jumlah byte dalam file yang dianalisis. Misalnya:
+
+user@ubuntu:~$ wc namafile.py
+   10    20   150 namafile.py
+
+Dalam shell, perintah echo $? digunakan untuk mencetak nilai status keluaran dari perintah yang terakhir dieksekusi. 
+Variabel khusus $? mengandung kode status keluaran dari perintah yang paling baru dijalankan dalam shell.
+
+Jadi misalkan tadi kita menjalankan perintah 
+user@ubuntu:~$ wc namafile.py
+diikuti dengan
+user@ubuntu:~$ echo $?
+0
+
+hasil 0 ini menunjukkan status yang sukses pada eksekusi program terakhir.
+
+

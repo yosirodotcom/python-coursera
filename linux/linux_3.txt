@@ -1,0 +1,19 @@
+>>> import os
+>>> import subprocess
+
+Environment variable di copy ke dalam my_env.
+>>> my_env = os.environ.copy()
+
+Ini adalah langkah kunci. Anda mengganti nilai variabel lingkungan "PATH" di dalam salinan my_env. 
+Anda menambahkan jalur direktori "/opt/myapp/" ke awal dari "PATH" yang ada, dengan memastikan 
+bahwa setiap jalur direktori di dalam "PATH" saat ini dipisahkan oleh os.pathsep.
+>>> my_env["PATH"] = os.pathsep.join(["/opt/myapp/", my_env["PATH"]])
+
+Ini menjalankan perintah "myapp" dengan variabel lingkungan yang telah Anda atur (my_env). 
+Anda menggunakan parameter env untuk mengatur variabel lingkungan yang akan digunakan dalam eksekusi perintah.
+>>> result = subprocess.run(["myapp"], env=my_env)
+
+Penjelasan:
+Kode ini menjelaskan bagaimana mengatur dan menggunakan variabel lingkungan kustom saat 
+menjalankan suatu perintah shell menggunakan modul subprocess dalam Python.
+
