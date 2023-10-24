@@ -21,3 +21,13 @@ Modelling:
     - Layer terakhir : tf.keras.layers.Dense(10, activation=tf.nn.softmax) --> akan ada pembahasan lanjutan dalam tuning paramater dari output layer ini.
 - Tentukan loss dan optimizer. Contoh: model.compile(optimizer=t.optimizer.Adam(), loss="sparse_categorical_crossentropy", metrics=["accuracy])
 - Train model. Contoh: model.fit(X, y, epochs=100)
+
+Metode Callback:
+- Berfungsi untuk mengentikan epoch jika akurasi tertentu telah tercapai
+
+Modelling dengan Convolutional
+- Sebelum menulis layer Flatten dan seterusnya, tuliskan convolutional layer dan max pooling yang diinginkan. pada fungsi Conv2D, parameter pertamanya harus kelipatan 16 increasing atau fix, misalkan 16, 32, 64, 64, 64
+- Gunakan validation test juga untuk mengukur akurasi data yang tak terlihat (C1_W4_Lab_2)
+
+Labeling
+- Bisa menggunakan metode folder sebagai label (lihat C1_W4_Lab_1)
