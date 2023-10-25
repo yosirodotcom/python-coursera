@@ -31,3 +31,5 @@ Modelling dengan Convolutional
 
 Labeling
 - Bisa menggunakan metode folder sebagai label (lihat C1_W4_Lab_1)
+
+
