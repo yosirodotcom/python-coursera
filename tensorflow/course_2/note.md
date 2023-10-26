@@ -42,3 +42,9 @@ train_datagen = ImageDataGenerator(
     - train model dengan memasukkan parameter callback
     - plot hasil
     
+Untuk multiclass maka ada beberapa parameter yang harus di ubah, selebihnya mirip sekali dengan pemodelan yang ada pada sebelumnya.
+- train_datagen.flow_from_directory(...,class_mode='categorical')
+- last layer tf.keras.layers.Dense(1, activation='softmax')
+- model.compile(..., loss='categorical_crossentropy')
+
+Pada C2W4 di jelaskan bagaimana data image yang ada berbentuk csv file di mana kolom pertama itu adalah label dan kolom berikutnya adalah feature. Dijelaskan juga jika ukuran gambar sudah sesuai dengan dimensi yang diinginkan.
