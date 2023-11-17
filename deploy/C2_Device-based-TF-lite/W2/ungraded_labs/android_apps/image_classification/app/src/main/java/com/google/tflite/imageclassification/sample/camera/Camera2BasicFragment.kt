@@ -876,6 +876,22 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
      * This a callback object for the [ImageReader]. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
+
+    /**
+     * Step #3 : Preparing the image input
+     * - Get the image when available in the camera feed
+     *      val image: Image = it.acquireLatestImage() // get the last image
+     *      val planes = image.getPlanes()
+     * - Convert it to YUV image format
+     *      yRowStride = planes[0].getRowStride()
+     *      uvRowStride = planes[1].getRowStride()
+     *      uvPixelStride = planes[1].getPixelStride()
+     * - Then convert this to ARGB8888 so that we can extract the RGB channels.
+     *      ImageUtils.convertYUV420ToARGB8888(
+     *          yuvBytes[0], yuvBytes[1], yuvBytes[2], previewSize.width, previewSize.height,
+     *          yRowStride, uvRowStride, uvPixelStride, rgbBytes)
+     */
+
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
         Log.d("on image available", "true" + previewSize.width + " " + previewSize.height)
         // We need wait until we have some size from onPreviewSizeChosen
@@ -886,20 +902,20 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
                 rgbBytes = IntArray(previewSize.width * previewSize.height)
             }
             try {
-                val image: Image = it?.acquireLatestImage()!!
+                val image: Image = it?.acquireLatestImage()!! //#3.a. Get the image when available in the camera feed
                 if (isProcessingFrame) {
                     image!!.close()
                 } else {
                     isProcessingFrame = true
                     Trace.beginSection("imageAvailable")
-                    val planes = image!!.getPlanes()
+                    val planes = image!!.getPlanes() //#3.a. Get the image when available in the camera feed
                     fillBytes(planes, yuvBytes)
-                    yRowStride = planes[0].getRowStride()
-                    val uvRowStride = planes[1].getRowStride()
-                    val uvPixelStride = planes[1].getPixelStride()
+                    yRowStride = planes[0].getRowStride() //#3.b. Strip YUV channels
+                    val uvRowStride = planes[1].getRowStride() //#3.b. Strip YUV channels
+                    val uvPixelStride = planes[1].getPixelStride() //#3.b. Strip YUV channels
 
                     imageConverter = Runnable {
-                        ImageUtils.convertYUV420ToARGB8888(
+                        ImageUtils.convertYUV420ToARGB8888( //3.c. Then convert this to ARGB8888 so that we can extract the RGB channels.
                                 yuvBytes[0],
                                 yuvBytes[1],
                                 yuvBytes[2],
