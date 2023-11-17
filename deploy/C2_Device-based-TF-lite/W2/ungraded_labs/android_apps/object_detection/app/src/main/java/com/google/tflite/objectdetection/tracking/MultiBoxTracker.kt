@@ -111,6 +111,7 @@ class MultiBoxTracker(context: Context) {
             boxPaint.color = recognition.color
 
             val cornerSize = Math.min(trackedPos.width(), trackedPos.height()) / 8.0f
+            // Step 11. show them in screen.
             canvas.drawRoundRect(trackedPos, cornerSize, cornerSize, boxPaint)
 
             val labelString = if (!TextUtils.isEmpty(recognition.title))
@@ -121,6 +122,7 @@ class MultiBoxTracker(context: Context) {
             // labelString);
             borderedText.drawText(
                     canvas, trackedPos.left + cornerSize, trackedPos.top, "$labelString%", boxPaint)
+            // end step 11.
         }
     }
 
@@ -159,6 +161,12 @@ class MultiBoxTracker(context: Context) {
 
         trackedObjects.clear()
         for (potential in rectsToTrack) {
+            // Step 10
+            // We segregate the detected objects with minimum confidence and pass it to the multi-box 
+            // tracker for drawing on the screen. We check whether the result is already present on 
+            // the screen or not. We also process the results and assign a color to it and display the 
+            // predicted class name. We have the screen location detected object name and then we draw 
+            // the title of the object along with a rectangle around it.
             val trackedRecognition = TrackedRecognition()
             trackedRecognition.detectionConfidence = potential.first
             trackedRecognition.location = RectF(potential.second.location)

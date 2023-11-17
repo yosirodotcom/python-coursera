@@ -181,7 +181,11 @@ class DetectorActivity : CameraActivity(), OnImageAvailableListener {
                     }
 
                     val mappedRecognitions = LinkedList<Classifier.Recognition>()
-
+                    // Step 9
+                    // Here we gather all the results. Since we know already that we just need to show 
+                    // the best detection we'll be relying on a minimum confidence score for a result to be 
+                    // considered a recognition. Then we'll map the location of the detected objects, 
+                    // to the screen's preview and drop boxes around these objects.
                     for (result in results) {
                         val location = result.location
                         if (location != null && result.confidence >= minimumConfidence) {
@@ -192,7 +196,7 @@ class DetectorActivity : CameraActivity(), OnImageAvailableListener {
                             result.location = location
                             mappedRecognitions.add(result)
                         }
-                    }
+                    }// end Step 9 and go to MultiBoxTracker.kt
 
                     tracker!!.trackResults(mappedRecognitions, currTimestamp)
                     trackingOverlay.postInvalidate()

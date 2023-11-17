@@ -66,9 +66,12 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
         Trace.beginSection("preprocessBitmap")
         // Preprocess the image data from 0-255 int to normalized float based
         // on the provided parameters.
-        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height) //Step 6
 
         imgData!!.rewind()
+
+        // Step 7
+        // when we have the pixel values, we can normalize them and load them to be ready for inference.
         for (i in 0 until inputSize) {
             for (j in 0 until inputSize) {
                 val pixelValue = intValues!![i * inputSize + j]
@@ -83,22 +86,33 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
                     imgData!!.putFloat(((pixelValue and 0xFF) - IMAGE_MEAN) / IMAGE_STD)
                 }
             }
-        }
+        } //end Step 7
         Trace.endSection() // preprocessBitmap
 
+        // Step 8 Pull out the tensor output
         // Copy the input data into TensorFlow.
+        // Since we know that the model generates four outputs will need for arrays to hold the results. 
+        // And here's the code for that. The first three arrays are all an array containing an array of the 
+        // number of detections. The last array is an array holding a single value which contains 
+        // the number of detections. The reason why it's arrays holding array's values is that this is the 
+        // data structure that most closely resembles a tensor.
         Trace.beginSection("feed")
         outputLocations = Array(1) { Array(NUM_DETECTIONS) { FloatArray(4) } }
         outputClasses = Array(1) { FloatArray(NUM_DETECTIONS) }
         outputScores = Array(1) { FloatArray(NUM_DETECTIONS) }
         numDetections = FloatArray(1)
-
+        // So in order to do the inference, we'll create the input array from the image data and will 
+        // create the structure for the outputs as a hashmap with the key being the index and the value 
+        // being the appropriate structure for that element in the output that you saw on the last slide. 
+        // Well, then invoke the TF lite interpreter with the run for multiple inputs and outputs passing 
+        // it the input array and this output map. 
         val inputArray = arrayOf<Any>(imgData!!)
         val outputMap = ArrayMap<Int, Any>()
         outputMap[0] = outputLocations!!
         outputMap[1] = outputClasses!!
         outputMap[2] = outputScores!!
         outputMap[3] = numDetections!!
+        // end Step 8
         Trace.endSection()
 
         // Run the inference call.
@@ -108,8 +122,16 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
 
         // Show the best detections.
         // after scaling them back to the input size.
+        // Step 8
+        // So it's time to map them to the screen UI drawing the bounding boxes and the labels.
         val recognitions = ArrayList<Classifier.Recognition>(NUM_DETECTIONS)
         for (i in 0 until NUM_DETECTIONS) {
+            // First, we need to detect the coordinates for the bounding rectangle, 
+            // and second detect the label and confidence for the object within it. 
+            // This code parses the output locations tensor to turn it into a rectangle. 
+            // The eye indicates the current detection. The rectangle in Android takes four 
+            // parameters for left top right and bottom. The model returns top left bottom and 
+            // right so we have to do them slightly out of order as you can see.
             val detection = RectF(
                     outputLocations!![0][i][1] * inputSize,
                     outputLocations!![0][i][0] * inputSize,
@@ -120,6 +142,9 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
             // while outputClasses correspond to class index from 0 to number_of_classes
             val labelOffset = 1
             recognitions.add(
+                // For the results labels and confidence scores, 
+                // these are in output classes and output scores respectively 
+                // so we can create the output string like this.
                     Classifier.Recognition(
                             "" + i,
                             labels[outputClasses!![0][i].toInt() + labelOffset],
@@ -128,7 +153,8 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
         }
         Trace.endSection() // "recognizeImage"
         return recognitions
-    }
+    } 
+    // end Step 8 and go to step 9 in DetectorActivity.kt
 
     override fun enableStatLogging(debug: Boolean) {
         //Not implemented
@@ -189,7 +215,9 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
             var labelsInput: InputStream? = null
             val actualFilename = labelFilename.split("file:///android_asset/".toRegex())
                     .dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-            labelsInput = assetManager.open(actualFilename)
+            labelsInput = assetManager.open(actualFilename) //Step 5
+            // in other approach for step 5 is:
+            //labels = assetManager.open("labelmap.txt").BufferedReader().useLines{it.toList()}
             val br: BufferedReader?
             br = BufferedReader(InputStreamReader(labelsInput!!))
             while (br.readLine()?.let { d.labels.add(it) } != null);
@@ -198,10 +226,10 @@ class TFLiteObjectDetectionAPIModel private constructor() : Classifier {
             d.inputSize = inputSize
 
             try {
-                val options = Interpreter.Options()
-                options.setNumThreads(4)
-                options.setUseNNAPI(false)
-                d.tfLite = Interpreter(loadModelFile(assetManager, modelFilename), options)
+                val options = Interpreter.Options() //Step 1
+                options.setNumThreads(4) //Step 2
+                options.setUseNNAPI(false) //Step 3
+                d.tfLite = Interpreter(loadModelFile(assetManager, modelFilename), options) //Step 4
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }

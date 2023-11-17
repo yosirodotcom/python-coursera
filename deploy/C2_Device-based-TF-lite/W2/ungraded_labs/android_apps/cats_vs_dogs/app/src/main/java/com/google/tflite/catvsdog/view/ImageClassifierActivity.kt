@@ -39,12 +39,16 @@ class ImageClassifierActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        val bitmap = ((view as ImageView).drawable as BitmapDrawable).bitmap
+        val bitmap = ((view as ImageView).drawable as BitmapDrawable).bitmap //The first line is that the current view is found, and its image is extracted as a bitmap, and then loaded into the bitmap variable.
 
-        val result = classifier.recognizeImage(bitmap)
+        val result = classifier.recognizeImage(bitmap) //This is then passed to the classifier module, which is Kotlin code, that wraps the interpreter object, as you'll see later, and a result is returned.
 
-        runOnUiThread { Toast.makeText(this, result.get(0).title, Toast.LENGTH_SHORT).show() }
+        runOnUiThread { Toast.makeText(this, result.get(0).title, Toast.LENGTH_SHORT).show() } //The title of the result is then passed to a Toast to be rendered
     }
 
 
 }
+
+
+
+
